@@ -165,7 +165,7 @@
                         <viewLayoutGuide key="safeArea" id="Xst-Bd-FVS"/>
                     </view>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="show" id="eLr-xX-sGk"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="goToSignIn" id="eLr-xX-sGk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KDx-OK-efy" userLabel="First Responder" sceneMemberID="firstResponder"/>
