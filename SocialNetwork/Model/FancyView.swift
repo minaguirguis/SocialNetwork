@@ -17,7 +17,8 @@ class FancyView: UIView {
             layer.shadowOpacity = 0.8//how dark shadow is
             layer.shadowRadius = 5.0//how far shadow spans out
             layer.shadowOffset = CGSize(width: 1.0, height: 1.0)//the blur radius used to create the shadow
-        
+            layer.cornerRadius = 2.0
+            
     }
 
 }
