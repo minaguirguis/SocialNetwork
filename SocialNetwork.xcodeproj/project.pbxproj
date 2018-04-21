@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0C2DC05F26722B5C6CDC3AB6 /* Pods_SocialNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2389FCD63F555F9B5F8102EB /* Pods_SocialNetwork.framework */; };
 		560ACF722070441D008CB16C /* FancyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 560ACF712070441D008CB16C /* FancyButton.swift */; };
+		561ACACE208AE36100CECFED /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 561ACACD208AE36100CECFED /* PostCell.swift */; };
 		566715BB2086D4E000ADC1FC /* FeedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566715BA2086D4E000ADC1FC /* FeedVC.swift */; };
 		56804CB7208A6EF70045AD28 /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56804CB6208A6EF70045AD28 /* CircleView.swift */; };
 		56AED17920685048004F834B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AED17820685048004F834B /* AppDelegate.swift */; };
@@ -27,6 +28,7 @@
 		1837D63B403BC43C14D480C0 /* Pods-SocialNetwork.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SocialNetwork.release.xcconfig"; path = "Pods/Target Support Files/Pods-SocialNetwork/Pods-SocialNetwork.release.xcconfig"; sourceTree = "<group>"; };
 		2389FCD63F555F9B5F8102EB /* Pods_SocialNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SocialNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		560ACF712070441D008CB16C /* FancyButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FancyButton.swift; sourceTree = "<group>"; };
+		561ACACD208AE36100CECFED /* PostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
 		566715BA2086D4E000ADC1FC /* FeedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedVC.swift; sourceTree = "<group>"; };
 		56804CB6208A6EF70045AD28 /* CircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
 		56AED17520685048004F834B /* SocialNetwork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SocialNetwork.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,6 +108,7 @@
 				56E9AA80206FE43100342650 /* FancyField.swift */,
 				560ACF712070441D008CB16C /* FancyButton.swift */,
 				56804CB6208A6EF70045AD28 /* CircleView.swift */,
+				561ACACD208AE36100CECFED /* PostCell.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -285,6 +288,7 @@
 				56AED17920685048004F834B /* AppDelegate.swift in Sources */,
 				56F8625E206FA9CB0035B8BA /* FancyView.swift in Sources */,
 				56F86261206FAAD60035B8BA /* Constants.swift in Sources */,
+				561ACACE208AE36100CECFED /* PostCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
