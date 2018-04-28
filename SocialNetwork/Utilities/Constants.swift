@@ -15,3 +15,7 @@ let KEY_UID = "uid"
 let SEGUE_IDENTIFIER  = "goToFeed"
 
 let SEGUE_IDENTIFIER1 = "goToSignIn"
+
+let USERS_REF = "users"
+
+let POSTS_REF = "posts"

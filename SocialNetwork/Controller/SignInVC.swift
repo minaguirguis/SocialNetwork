@@ -57,7 +57,7 @@ class SignInVC: UIViewController {
             } else {
                 print("MINA: Successfully authenticated with Firebase")
                 if let user = user {
-                    let userData = ["provider": user.providerID]//from Databse
+                    let userData = ["provider": credenatial.provider]//from Databse
                     self.completeSignIN(id: user.uid, userData: userData)
                 }
             }

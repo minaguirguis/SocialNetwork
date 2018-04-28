@@ -16,8 +16,8 @@ class DataService {
     static let ds = DataService()//created singleton
     
     private var _REF_BASE = DB_BASE
-    private var _REF_POSTS = DB_BASE.child("posts")//getting the object posts
-    private var _REF_USERS = DB_BASE.child("users")
+    private var _REF_POSTS = DB_BASE.child(POSTS_REF)//getting the object posts
+    private var _REF_USERS = DB_BASE.child(USERS_REF)
     
     var REF_BASE: DatabaseReference {
         return _REF_BASE
@@ -34,7 +34,7 @@ class DataService {
     func createFirebaseDBUser(uid: String, userData: Dictionary<String, String>) {
         REF_USERS.child(uid).updateChildValues(userData)
         //its referencing users and creating a uid if one is not found
-        print("MINA: Successfully created user in firebase")
+        print("MINA: Successfully created user in Firebase")
     }
     
     
