@@ -51,11 +51,14 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        
         let post = posts[indexPath.row]
-        print("MINA: \(post.caption)")//getting the row and caption of post to test it
         
-        return tableView.dequeueReusableCell(withIdentifier: "PostCell") as! PostCell
+        if let cell = tableView.dequeueReusableCell(withIdentifier: POSTCELL_REF) as? PostCell{
+            cell.configureCell(post: post)//setting UI elements to data
+            return cell
+        } else {
+            return PostCell()
+        }
     }
     
     @IBAction func signOutTapped(_ sender: Any) {

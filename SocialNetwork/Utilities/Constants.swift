@@ -19,3 +19,5 @@ let SEGUE_IDENTIFIER1 = "goToSignIn"
 let USERS_REF = "users"
 
 let POSTS_REF = "posts"
+
+let POSTCELL_REF = "PostCell"
