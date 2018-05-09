@@ -14,6 +14,8 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
     
+    var posts = [Post]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -21,7 +23,18 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         tableView.dataSource = self
         
         DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
-            print(snapshot.value)
+            if let snapshot = snapshot.children.allObjects as? [DataSnapshot] {
+                for snap in snapshot {
+                    print("SNAP: \(snap)")
+                    if let postDict = snap.value as? Dictionary<String, AnyObject> {
+                        let key = snap.key
+                        let post = Post(postKey: key, postData: postDict)
+                        self.posts.append(post)//add this to the array created above
+                    }
+                }
+            }
+            
+            self.tableView.reloadData()//to refresh after getting data
         })
         
     }
@@ -33,10 +46,15 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return posts.count//number of cells to be the number of objects in our array
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        
+        let post = posts[indexPath.row]
+        print("MINA: \(post.caption)")//getting the row and caption of post to test it
+        
         return tableView.dequeueReusableCell(withIdentifier: "PostCell") as! PostCell
     }
     

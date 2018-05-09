@@ -23,6 +23,7 @@
 		56E9AA81206FE43100342650 /* FancyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E9AA80206FE43100342650 /* FancyField.swift */; };
 		56F8625E206FA9CB0035B8BA /* FancyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F8625D206FA9CB0035B8BA /* FancyView.swift */; };
 		56F86261206FAAD60035B8BA /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F86260206FAAD60035B8BA /* Constants.swift */; };
+		56F8B96720A28F8F00381BC0 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F8B96620A28F8F00381BC0 /* Post.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 		56E9AA80206FE43100342650 /* FancyField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FancyField.swift; sourceTree = "<group>"; };
 		56F8625D206FA9CB0035B8BA /* FancyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FancyView.swift; sourceTree = "<group>"; };
 		56F86260206FAAD60035B8BA /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		56F8B96620A28F8F00381BC0 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		5C29BA54A985CE607CD2DEC9 /* Pods-SocialNetwork.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SocialNetwork.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SocialNetwork/Pods-SocialNetwork.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -112,6 +114,7 @@
 				560ACF712070441D008CB16C /* FancyButton.swift */,
 				56804CB6208A6EF70045AD28 /* CircleView.swift */,
 				561ACACD208AE36100CECFED /* PostCell.swift */,
+				56F8B96620A28F8F00381BC0 /* Post.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -293,6 +296,7 @@
 				56804CB7208A6EF70045AD28 /* CircleView.swift in Sources */,
 				56E9AA81206FE43100342650 /* FancyField.swift in Sources */,
 				566715BB2086D4E000ADC1FC /* FeedVC.swift in Sources */,
+				56F8B96720A28F8F00381BC0 /* Post.swift in Sources */,
 				56AED17B20685048004F834B /* SignInVC.swift in Sources */,
 				56E9AA7F206FDF5F00342650 /* RoundButton.swift in Sources */,
 				56E304B1208BFCA700CC14D5 /* DataService.swift in Sources */,
