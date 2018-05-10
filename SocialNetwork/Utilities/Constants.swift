@@ -21,3 +21,5 @@ let USERS_REF = "users"
 let POSTS_REF = "posts"
 
 let POSTCELL_REF = "PostCell"
+
+let POST_STORAGE_REF = "post-pics"
