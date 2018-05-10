@@ -14,11 +14,12 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var imageAdd: CircleView!
+    @IBOutlet weak var captionField: FancyField!
     
     var posts = [Post]()
     var imagePicker: UIImagePickerController!
-    //static var imageCache = NSCache<NSString, UIImage>()
     static var imageCache: NSCache<NSString, UIImage> = NSCache()
+    var imageSelected = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,7 +82,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
         
         if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
             imageAdd.image = image
-            //imageSelected = true
+            imageSelected = true
         } else {
             print("MINA: A valid image was not selected")
         }
@@ -94,6 +95,34 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
         
     }
 
+    @IBAction func postButtonTapped(_ sender: Any) {
+        
+        guard let caption = captionField.text, caption != "" else {
+            print("MINA: Caption must be entered")
+            return
+        }
+        guard let img = imageAdd.image, imageSelected == true else {// check to see if the img has an image
+            print("MINA: An image must be selected")
+            return
+        }
+        
+        if let imgData = UIImageJPEGRepresentation(img, 0.2) {
+            
+            let imgUid = NSUUID().uuidString//gets us the UID of the post
+            let metaData = StorageMetadata()
+            metaData.contentType = "image/jpeg"
+            
+            DataService.ds.REF_POST_IMAGES.child(imgUid).putData(imgData, metadata: metaData){ (metadata, error)in
+                if error != nil {
+                    print("MINA: Unable to upload image to Firebase Storage")
+                } else {
+                    print("MINA: Successfully uploaded to Firebase Storage")
+                    let downloadUrl = metaData.downloadURL()?.absoluteString
+                }
+            }
+        }
+        
+    }
     
     @IBAction func signOutTapped(_ sender: Any) {
         let keychainResult = KeychainWrapper.standard.removeObject(forKey: KEY_UID)
