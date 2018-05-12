@@ -240,26 +240,26 @@
                                                     <rect key="frame" x="16" y="8" width="343" height="271.5"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="nAh-fP-iQP">
-                                                            <rect key="frame" x="8" y="8" width="327" height="217.5"/>
+                                                            <rect key="frame" x="8" y="8" width="327" height="236.5"/>
                                                             <subviews>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7qT-01-6a7">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="327" height="60"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="327" height="60.5"/>
                                                                     <subviews>
                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile" translatesAutoresizingMaskIntoConstraints="NO" id="y5x-L7-RgC" customClass="CircleView" customModule="SocialNetwork" customModuleProvider="target">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="60" height="60.5"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="60" id="W6G-To-7wm"/>
                                                                                 <constraint firstAttribute="height" constant="60" id="cqo-x5-slT"/>
                                                                             </constraints>
                                                                         </imageView>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Dh-ac-C4z">
-                                                                            <rect key="frame" x="60" y="0.0" width="207" height="60"/>
+                                                                            <rect key="frame" x="60" y="0.0" width="207" height="60.5"/>
                                                                             <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="18"/>
                                                                             <color key="textColor" red="0.89019607840000003" green="0.37647058820000001" blue="0.21176470589999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty-heart" translatesAutoresizingMaskIntoConstraints="NO" id="iHK-lC-jvp">
-                                                                            <rect key="frame" x="267" y="0.0" width="60" height="60"/>
+                                                                            <rect key="frame" x="267" y="0.0" width="60" height="60.5"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="60" id="93V-5L-DbY"/>
                                                                                 <constraint firstAttribute="width" constant="60" id="yU2-UV-k8l"/>
@@ -268,10 +268,13 @@
                                                                     </subviews>
                                                                 </stackView>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="ce6-yD-XOr">
-                                                                    <rect key="frame" x="0.0" y="68" width="327" height="91.5"/>
+                                                                    <rect key="frame" x="0.0" y="68.5" width="327" height="110"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="110" id="nAi-XG-mgs"/>
+                                                                    </constraints>
                                                                 </imageView>
                                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="4c5-Zy-niU">
-                                                                    <rect key="frame" x="0.0" y="167.5" width="327" height="50"/>
+                                                                    <rect key="frame" x="0.0" y="186.5" width="327" height="50"/>
                                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="F8A-Pz-caJ"/>
@@ -283,16 +286,16 @@
                                                             </subviews>
                                                         </stackView>
                                                         <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="2oe-od-j18">
-                                                            <rect key="frame" x="256" y="241.5" width="79" height="22"/>
+                                                            <rect key="frame" x="256" y="260.5" width="79" height="3"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Likes" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m5M-35-aDT">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="36.5" height="22"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="36.5" height="3"/>
                                                                     <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="16"/>
                                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="8888" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YYo-e8-weO">
-                                                                    <rect key="frame" x="41.5" y="0.0" width="37.5" height="22"/>
+                                                                    <rect key="frame" x="41.5" y="0.0" width="37.5" height="3"/>
                                                                     <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="16"/>
                                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
                                                                     <nil key="highlightedColor"/>
@@ -321,6 +324,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="caption" destination="4c5-Zy-niU" id="WYn-5X-CBt"/>
+                                            <outlet property="likeImg" destination="iHK-lC-jvp" id="GX3-td-zUn"/>
                                             <outlet property="likesLbl" destination="YYo-e8-weO" id="KRK-AS-xa3"/>
                                             <outlet property="postImg" destination="ce6-yD-XOr" id="Oqz-mw-c7B"/>
                                             <outlet property="profileImg" destination="y5x-L7-RgC" id="USz-Q3-Zh5"/>
