@@ -15,11 +15,14 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var imageAdd: CircleView!
     @IBOutlet weak var captionField: FancyField!
+    @IBOutlet weak var profileImg: UIImageView!
     
     var posts = [Post]()
     var imagePicker: UIImagePickerController!
+    var profilePicker: UIImagePickerController!
     static var imageCache: NSCache<NSString, UIImage> = NSCache()
     var imageSelected = false
+    var imageCount = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +33,12 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
         imagePicker = UIImagePickerController()
         imagePicker.allowsEditing = true
         imagePicker.delegate = self
+        
+        profilePicker = UIImagePickerController()
+        profilePicker.allowsEditing = true
+        profilePicker.delegate = self
+        
+        
         
         DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
             if let snapshot = snapshot.children.allObjects as? [DataSnapshot] {
@@ -79,17 +88,45 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
-        if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
-            imageAdd.image = image
-            imageSelected = true
-        } else {
-            print("MINA: A valid image was not selected")
+        if imageCount == 1 {
+            if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
+                imageAdd.image = image
+                imageSelected = true
+                imageCount = 0
+            } else {
+                print("MINA: A valid image was not selected")
+                imageCount = 0
+            }
+            imagePicker.dismiss(animated: true, completion: nil)
+        
         }
-        imagePicker.dismiss(animated: true, completion: nil)
+       
+            //profileImage below ---------------------
+        if imageCount == 2 {
+            if let profilePic = info[UIImagePickerControllerEditedImage] as? UIImage {
+                profileImg.image = profilePic
+                imageSelected = true
+                imageCount = 0
+            } else {
+            print("MINA: A valid profileimage was not selected")
+            imageCount = 0
+            }
+        
+        }
+        
+    }
+    
+
+    
+    @IBAction func profileImgTapped(_ sender: Any) {
+        imageCount = 2
+        present(profilePicker, animated: true, completion: nil)
     }
     
     
     @IBAction func addImageTapped(_ sender: Any) {
+        
+        imageCount = 1
         present(imagePicker, animated: true, completion: nil)
         
     }
