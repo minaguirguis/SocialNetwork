@@ -152,10 +152,14 @@
                                 <subviews>
                                     <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sign-out" translatesAutoresizingMaskIntoConstraints="NO" id="b5n-gK-kh0">
                                         <rect key="frame" x="16" y="20" width="45" height="38"/>
+                                        <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="38" id="6zb-Ni-RZB"/>
                                             <constraint firstAttribute="width" constant="45" id="xWQ-9q-KKD"/>
                                         </constraints>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="p3D-ha-jbK" appends="YES" id="69P-Rc-yId"/>
+                                        </connections>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Feed" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z7s-iy-WTd">
                                         <rect key="frame" x="157" y="21" width="60" height="36"/>
@@ -163,7 +167,7 @@
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="add-image" translatesAutoresizingMaskIntoConstraints="NO" id="cux-Li-xjt" customClass="CircleView" customModule="SocialNetwork" customModuleProvider="target">
+                                    <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profilePicDefault" translatesAutoresizingMaskIntoConstraints="NO" id="cux-Li-xjt" customClass="CircleView" customModule="SocialNetwork" customModuleProvider="target">
                                         <rect key="frame" x="318" y="15" width="49" height="49"/>
                                         <gestureRecognizers/>
                                         <constraints>
@@ -171,7 +175,7 @@
                                             <constraint firstAttribute="width" constant="49" id="pxM-1d-Pxh"/>
                                         </constraints>
                                         <connections>
-                                            <outletCollection property="gestureRecognizers" destination="UUH-yx-kvw" appends="YES" id="WJT-YX-Irv"/>
+                                            <outletCollection property="gestureRecognizers" destination="Ecz-n3-0aY" appends="YES" id="5ZY-U7-vNu"/>
                                         </connections>
                                     </imageView>
                                 </subviews>
@@ -186,9 +190,6 @@
                                     <constraint firstItem="b5n-gK-kh0" firstAttribute="top" secondItem="Hwd-QC-TcG" secondAttribute="top" constant="20" id="lLh-hf-y8L"/>
                                     <constraint firstAttribute="trailing" secondItem="cux-Li-xjt" secondAttribute="trailing" constant="8" id="xFx-2Y-zCD"/>
                                 </constraints>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="p3D-ha-jbK" appends="YES" id="dLc-EQ-TuE"/>
-                                </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zKr-qW-k9D" customClass="FancyView" customModule="SocialNetwork" customModuleProvider="target">
                                 <rect key="frame" x="16" y="81" width="343" height="65"/>
@@ -371,19 +372,19 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KDx-OK-efy" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="p3D-ha-jbK" userLabel="SignOutTapped">
-                    <connections>
-                        <action selector="signOutTapped:" destination="5k0-jO-Lsk" id="O3J-aw-aRn"/>
-                    </connections>
-                </tapGestureRecognizer>
                 <tapGestureRecognizer id="nd4-q8-zF9" userLabel="addImageTapped">
                     <connections>
                         <action selector="addImageTapped:" destination="5k0-jO-Lsk" id="fHq-Yu-nKn"/>
                     </connections>
                 </tapGestureRecognizer>
-                <tapGestureRecognizer id="UUH-yx-kvw" userLabel="profileImgTapped">
+                <tapGestureRecognizer id="p3D-ha-jbK" userLabel="SignOutTapped">
                     <connections>
-                        <action selector="profileImgTapped:" destination="5k0-jO-Lsk" id="b8e-mM-01i"/>
+                        <action selector="signOutTapped:" destination="5k0-jO-Lsk" id="O3J-aw-aRn"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="Ecz-n3-0aY" userLabel="profileImgTapped">
+                    <connections>
+                        <action selector="profileImgTapped:" destination="5k0-jO-Lsk" id="bER-4y-Nk5"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
@@ -398,6 +399,7 @@
         <image name="f" width="352" height="328"/>
         <image name="placeholder" width="567" height="312"/>
         <image name="profile" width="113" height="155"/>
+        <image name="profilePicDefault" width="640" height="430"/>
         <image name="sign-out" width="92" height="65"/>
     </resources>
 </document>
