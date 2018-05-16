@@ -111,7 +111,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
             print("MINA: A valid profileimage was not selected")
             imageCount = 0
             }
-        
+            profilePicker.dismiss(animated: true, completion: nil)
         }
         
     }
