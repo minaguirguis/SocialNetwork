@@ -108,12 +108,6 @@
 		56AED18A20685155004F834B /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				56F8625D206FA9CB0035B8BA /* FancyView.swift */,
-				56E9AA7E206FDF5F00342650 /* RoundButton.swift */,
-				56E9AA80206FE43100342650 /* FancyField.swift */,
-				560ACF712070441D008CB16C /* FancyButton.swift */,
-				56804CB6208A6EF70045AD28 /* CircleView.swift */,
-				561ACACD208AE36100CECFED /* PostCell.swift */,
 				56F8B96620A28F8F00381BC0 /* Post.swift */,
 			);
 			path = Model;
@@ -122,6 +116,12 @@
 		56AED18B2068515D004F834B /* View */ = {
 			isa = PBXGroup;
 			children = (
+				56F8625D206FA9CB0035B8BA /* FancyView.swift */,
+				56E9AA7E206FDF5F00342650 /* RoundButton.swift */,
+				56E9AA80206FE43100342650 /* FancyField.swift */,
+				560ACF712070441D008CB16C /* FancyButton.swift */,
+				56804CB6208A6EF70045AD28 /* CircleView.swift */,
+				561ACACD208AE36100CECFED /* PostCell.swift */,
 				56AED17C20685048004F834B /* Main.storyboard */,
 			);
 			path = View;

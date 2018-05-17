@@ -106,6 +106,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
             if let profilePic = info[UIImagePickerControllerEditedImage] as? UIImage {
                 profileImg.image = profilePic
                 imageSelected = true
+                saveUploadProfilePicToFB(img: profilePic)
                 imageCount = 0
             } else {
             print("MINA: A valid profileimage was not selected")
@@ -121,6 +122,8 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
     @IBAction func profileImgTapped(_ sender: Any) {
         imageCount = 2
         present(profilePicker, animated: true, completion: nil)
+        
+        
     }
     
     
@@ -137,6 +140,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
             print("MINA: Caption must be entered")
             return
         }
+        
         guard let img = imageAdd.image, imageSelected == true else {// check to see if the img has an image
             print("MINA: An image must be selected")
             return
@@ -180,6 +184,38 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
         
         tableView.reloadData()
     }
+    
+    func saveUploadProfilePicToFB(img: UIImage) {
+        //upload chosen image to firebase
+        if let profImgData = UIImageJPEGRepresentation(img, 0.2) {
+            
+            let imgUid = NSUUID().uuidString//generates unique ID for image
+            let metaData = StorageMetadata()
+            metaData.contentType = "image/jpeg"
+            
+            DataService.ds.REF_PROFILE_IMAGES.child(imgUid).putData(profImgData, metadata: metaData) { (metaData, error) in
+                
+                if error != nil {
+                    print("MINA: Unable to upload Profile pic to firebase storage")
+                } else {
+                    print("MINA: Successfully uploaded image to Firebase storage")
+                    let downloadURL = metaData?.downloadURL()?.absoluteString
+                    UserDefaults.standard.set(downloadURL, forKey: "savedImage")
+                    
+                    print("MINA: \(String(describing: downloadURL))")
+                }
+                
+            }
+        }
+    }
+    
+    func getProfilePic() {
+        //get from NSUserdafaults or Firebase
+        
+        
+        
+    }
+
     
     @IBAction func signOutTapped(_ sender: Any) {
         let keychainResult = KeychainWrapper.standard.removeObject(forKey: KEY_UID)
