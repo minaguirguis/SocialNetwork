@@ -23,9 +23,18 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
     static var imageCache: NSCache<NSString, UIImage> = NSCache()
     var imageSelected = false
     var imageCount = 0
+    var downloadURL: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if UserDefaults.standard.object(forKey: PROFILE_IMAGE_KEY) == nil {
+            print("MINA: Still have to choose a profile pic")
+        } else {
+            getProfilePic()
+             print("MINA: Image found in local storage")
+        }
+        
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -55,6 +64,10 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
             self.tableView.reloadData()//to refresh after getting data
         })
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+       
     }
     
     
@@ -108,6 +121,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
                 imageSelected = true
                 saveUploadProfilePicToFB(img: profilePic)
                 imageCount = 0
+                
             } else {
             print("MINA: A valid profileimage was not selected")
             imageCount = 0
@@ -120,10 +134,9 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
 
     
     @IBAction func profileImgTapped(_ sender: Any) {
-        imageCount = 2
-        present(profilePicker, animated: true, completion: nil)
         
-        
+            imageCount = 2
+            present(profilePicker, animated: true, completion: nil)
     }
     
     
@@ -198,23 +211,39 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
                 if error != nil {
                     print("MINA: Unable to upload Profile pic to firebase storage")
                 } else {
-                    print("MINA: Successfully uploaded image to Firebase storage")
-                    let downloadURL = metaData?.downloadURL()?.absoluteString
-                    UserDefaults.standard.set(downloadURL, forKey: "savedImage")
-                    
-                    print("MINA: \(String(describing: downloadURL))")
+                    print("MINA: Successfully uploaded Profile pic to Firebase storage")
+                    self.downloadURL = metaData?.downloadURL()?.absoluteString
+                    UserDefaults.standard.set(self.downloadURL, forKey: PROFILE_PIC_METADATA)
                 }
                 
             }
+            //storing the image locally
+            print("MINA: Now storing the image locally")
+            let profileData: NSData = UIImagePNGRepresentation(img)! as NSData
+            UserDefaults.standard.set(profileData, forKey: PROFILE_IMAGE_KEY)
+            print("MINA: \(String(describing: self.downloadURL))")
         }
     }
     
     func getProfilePic() {
         //get from NSUserdafaults or Firebase
-        
+        if profileImg != nil {
+            let img = UserDefaults.standard.object(forKey: PROFILE_IMAGE_KEY) as! NSData
+            profileImg.image = UIImage(data: img as Data)
+        } else {
+            let ref = Storage.storage().reference(forURL: downloadURL)
+           ref.getData(maxSize: 3 * 1024 * 1024, completion: { (data, error) in
+                if error != nil {
+                    print("MINA: Unable to download Profile Pic from Firebase Storage")
+                } else {
+                    print("MINA: Successfully downloaded Profile Pic from Firebase Storage")
+                }
+            })
+        }
         
         
     }
+    
 
     
     @IBAction func signOutTapped(_ sender: Any) {
