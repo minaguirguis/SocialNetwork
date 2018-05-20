@@ -24,6 +24,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
     var imageSelected = false
     var imageCount = 0
     var downloadURL: String!
+    var ImgProfileRef: DatabaseReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -211,9 +212,14 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
                 if error != nil {
                     print("MINA: Unable to upload Profile pic to firebase storage")
                 } else {
+                    //uploading it to firebase storage
                     print("MINA: Successfully uploaded Profile pic to Firebase storage")
                     self.downloadURL = metaData?.downloadURL()?.absoluteString
                     UserDefaults.standard.set(self.downloadURL, forKey: PROFILE_PIC_METADATA)
+                    
+                    //storing it to database
+                    self.ImgProfileRef = DataService.ds.REF_USER_CURRENT.child(PROFILE_PIC_REF)
+                    self.ImgProfileRef.setValue(self.downloadURL)
                 }
                 
             }
@@ -222,7 +228,10 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
             let profileData: NSData = UIImagePNGRepresentation(img)! as NSData
             UserDefaults.standard.set(profileData, forKey: PROFILE_IMAGE_KEY)
             print("MINA: \(String(describing: self.downloadURL))")
+            
         }
+        
+        
     }
     
     func getProfilePic() {
@@ -231,19 +240,29 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
             let img = UserDefaults.standard.object(forKey: PROFILE_IMAGE_KEY) as! NSData
             profileImg.image = UIImage(data: img as Data)
         } else {
-            let ref = Storage.storage().reference(forURL: downloadURL)
-           ref.getData(maxSize: 3 * 1024 * 1024, completion: { (data, error) in
-                if error != nil {
-                    print("MINA: Unable to download Profile Pic from Firebase Storage")
-                } else {
-                    print("MINA: Successfully downloaded Profile Pic from Firebase Storage")
-                }
-            })
+            
         }
         
         
     }
     
+    
+    //TODO - figure out a way to download from firebase and set it as profile pic as well as save it in UserDefaults
+    func downloadingProfilePicFromFB(img: UIImage) {
+        let ref = Storage.storage().reference(forURL: downloadURL)
+        ref.getData(maxSize: 3 * 1024 * 1024, completion: { (data, error) in
+            if error != nil {
+                print("MINA: Unable to download Profile Pic from Firebase Storage")
+            } else {
+                print("MINA: Successfully downloaded Profile Pic from Firebase Storage")
+                if let imageData = data {
+                    self.profileImg.image = UIImage(data: imageData)
+                    
+                }
+                
+            }
+        })
+    }
 
     
     @IBAction func signOutTapped(_ sender: Any) {
