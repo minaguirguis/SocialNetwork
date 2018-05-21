@@ -25,16 +25,24 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
     var imageCount = 0
     var downloadURL: String!
     var ImgProfileRef: DatabaseReference!
+    var imageUrl: String!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        //UserDefaults.standard.removeObject(forKey: PROFILE_IMAGE_KEY)
+        
+        
+        //TODO - set up a gaurd statment
         if UserDefaults.standard.object(forKey: PROFILE_IMAGE_KEY) == nil {
             print("MINA: Still have to choose a profile pic")
         } else {
             getProfilePic()
-             print("MINA: Image found in local storage")
+            print("MINA: Image found in local storage")
         }
+      
         
         
         tableView.delegate = self
@@ -65,14 +73,10 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
             self.tableView.reloadData()//to refresh after getting data
         })
         
+        
+        
+        
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-       
-    }
-    
-    
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -227,7 +231,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
             print("MINA: Now storing the image locally")
             let profileData: NSData = UIImagePNGRepresentation(img)! as NSData
             UserDefaults.standard.set(profileData, forKey: PROFILE_IMAGE_KEY)
-            print("MINA: \(String(describing: self.downloadURL))")
             
         }
         
@@ -236,32 +239,55 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
     
     func getProfilePic() {
         //get from NSUserdafaults or Firebase
-        if profileImg != nil {
+        //TODO - fix logic
+        if profileImg.image == nil{
             let img = UserDefaults.standard.object(forKey: PROFILE_IMAGE_KEY) as! NSData
             profileImg.image = UIImage(data: img as Data)
         } else {
-            
+            downloadingProfilePicFromFB()
         }
         
         
     }
     
     
-    //TODO - figure out a way to download from firebase and set it as profile pic as well as save it in UserDefaults
-    func downloadingProfilePicFromFB(img: UIImage) {
-        let ref = Storage.storage().reference(forURL: downloadURL)
-        ref.getData(maxSize: 3 * 1024 * 1024, completion: { (data, error) in
-            if error != nil {
-                print("MINA: Unable to download Profile Pic from Firebase Storage")
-            } else {
-                print("MINA: Successfully downloaded Profile Pic from Firebase Storage")
-                if let imageData = data {
-                    self.profileImg.image = UIImage(data: imageData)
-                    
+    func downloadingProfilePicFromFB() {
+        
+        //getting url from database
+       var ref: DatabaseReference?
+        var handle: DatabaseHandle
+        
+        let user = Auth.auth().currentUser
+        
+        ref = Database.database().reference()
+        
+        handle = (ref?.child(USERS_REF).child((user?.uid)!).child(PROFILE_PIC_REF).observe(.value, with: { (snapshot) in
+            if (snapshot.value as? String) != nil {
+                if snapshot.value != nil {
+                    self.imageUrl = snapshot.value as! String
                 }
-                
             }
-        })
+            
+            //downloading image from URL that was taken from Database
+            if let image =  self.imageUrl {
+                let url = URL(string: image)
+                URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
+                    if error != nil {
+                        
+                        print("MINA: \(String(describing: error))")
+                        return
+                    } else {
+                        
+                        DispatchQueue.main.async {
+                            self.profileImg.image = UIImage(data: data!)
+                        }
+                    }
+                    
+                }).resume()
+                print("MINA: Profile Pic from database downloaded")
+            }
+        }))!
+  
     }
 
     

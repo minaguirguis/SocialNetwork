@@ -35,3 +35,5 @@ let PROFILE_PIC_METADATA = "savedProfMetadata"
 //let PROF_IMG_TRACK = "profilePicTrack"
 
 let PROFILE_PIC_REF = "profile-pic"
+
+let PROFILE_PIC_STORAGE_REF = "profile-pics"
