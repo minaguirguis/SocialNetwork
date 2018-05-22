@@ -15,21 +15,39 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var imageAdd: CircleView!
     @IBOutlet weak var captionField: FancyField!
+    @IBOutlet weak var profileImg: UIImageView!
     
     var posts = [Post]()
     var imagePicker: UIImagePickerController!
+    var profilePicker: UIImagePickerController!
     static var imageCache: NSCache<NSString, UIImage> = NSCache()
     var imageSelected = false
+    var imageCount = 0
+    var downloadURL: String!
+    var ImgProfileRef: DatabaseReference!
+    var imageUrl: String!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        profilePicStartUp()
+        
+        
+        
+    
         tableView.delegate = self
         tableView.dataSource = self
         
         imagePicker = UIImagePickerController()
         imagePicker.allowsEditing = true
         imagePicker.delegate = self
+        
+        profilePicker = UIImagePickerController()
+        profilePicker.allowsEditing = true
+        profilePicker.delegate = self
+        
+        
         
         DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
             if let snapshot = snapshot.children.allObjects as? [DataSnapshot] {
@@ -46,10 +64,10 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
             self.tableView.reloadData()//to refresh after getting data
         })
         
+        
+        
+        
     }
-    
-    
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -79,17 +97,48 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
-        if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
-            imageAdd.image = image
-            imageSelected = true
-        } else {
-            print("MINA: A valid image was not selected")
+        if imageCount == 1 {
+            if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
+                imageAdd.image = image
+                imageSelected = true
+                imageCount = 0
+            } else {
+                print("MINA: A valid image was not selected")
+                imageCount = 0
+            }
+            imagePicker.dismiss(animated: true, completion: nil)
+        
         }
-        imagePicker.dismiss(animated: true, completion: nil)
+       
+            //profileImage below ---------------------
+        if imageCount == 2 {
+            if let profilePic = info[UIImagePickerControllerEditedImage] as? UIImage {
+                profileImg.image = profilePic
+                imageSelected = true
+                saveUploadProfilePicToFB(img: profilePic)
+                imageCount = 0
+                
+            } else {
+            print("MINA: A valid profileimage was not selected")
+            imageCount = 0
+            }
+            profilePicker.dismiss(animated: true, completion: nil)
+        }
+        
+    }
+    
+
+    
+    @IBAction func profileImgTapped(_ sender: Any) {
+        
+            imageCount = 2
+            present(profilePicker, animated: true, completion: nil)
     }
     
     
     @IBAction func addImageTapped(_ sender: Any) {
+        
+        imageCount = 1
         present(imagePicker, animated: true, completion: nil)
         
     }
@@ -100,6 +149,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
             print("MINA: Caption must be entered")
             return
         }
+        
         guard let img = imageAdd.image, imageSelected == true else {// check to see if the img has an image
             print("MINA: An image must be selected")
             return
@@ -144,11 +194,140 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
         tableView.reloadData()
     }
     
+    func saveUploadProfilePicToFB(img: UIImage) {
+        //upload chosen image to firebase
+        if let profImgData = UIImageJPEGRepresentation(img, 0.2) {
+            
+            let imgUid = NSUUID().uuidString//generates unique ID for image
+            let metaData = StorageMetadata()
+            metaData.contentType = "image/jpeg"
+            
+            DataService.ds.REF_PROFILE_IMAGES.child(imgUid).putData(profImgData, metadata: metaData) { (metaData, error) in
+                
+                if error != nil {
+                    print("MINA: Unable to upload Profile pic to firebase storage")
+                } else {
+                    //uploading it to firebase storage
+                    print("MINA: Successfully uploaded Profile pic to Firebase storage")
+                    self.downloadURL = metaData?.downloadURL()?.absoluteString
+                    UserDefaults.standard.set(self.downloadURL, forKey: PROFILE_PIC_METADATA)
+                    
+                    //storing it to database
+                    self.ImgProfileRef = DataService.ds.REF_USER_CURRENT.child(PROFILE_PIC_REF)
+                    self.ImgProfileRef.setValue(self.downloadURL)
+                }
+                
+            }
+            //storing the image locally
+            print("MINA: Now storing the image locally")
+           savingProfilePicLocally(img: img)
+            
+        }
+        
+        
+    }
+    
+    func getProfilePic() {
+        if UserDefaults.standard.object(forKey: PROFILE_IMAGE_KEY) == nil {
+            downloadingProfilePicFromFB()
+        } else {
+            let img = UserDefaults.standard.object(forKey: PROFILE_IMAGE_KEY) as! NSData
+            profileImg.image = UIImage(data: img as Data)
+        }
+        
+        
+    }
+    
+    
+    func downloadingProfilePicFromFB() {
+        
+        //getting url from database
+       var ref: DatabaseReference?
+        var handle: DatabaseHandle
+        
+        let user = Auth.auth().currentUser
+        
+        ref = Database.database().reference()
+        
+        handle = (ref?.child(USERS_REF).child((user?.uid)!).child(PROFILE_PIC_REF).observe(.value, with: { (snapshot) in
+            if (snapshot.value as? String) != nil {
+                if snapshot.value != nil {
+                    self.imageUrl = snapshot.value as! String
+                }
+            }
+            
+            //downloading image from URL that was taken from Database
+            if let image =  self.imageUrl {
+                let url = URL(string: image)
+                URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
+                    if error != nil {
+                        
+                        print("MINA: \(String(describing: error))")
+                        return
+                    } else {
+                        
+                        DispatchQueue.main.async {
+                            self.profileImg.image = UIImage(data: data!)
+                            self.savingProfilePicLocally(img: self.profileImg.image!)
+                        }
+                        
+                    }
+                    
+                }).resume()
+                print("MINA: Profile Pic from database downloaded")
+                
+                
+            }
+        }))!
+  
+    }
+    
+    
+    func profilePicStartUp() {
+        //TODO - get profile pic for returning user
+        if UserDefaults.standard.object(forKey: PROFILE_IMAGE_KEY) != nil {
+            print("MINA: User has profile pic downloaded")
+            getProfilePic()
+        } else {
+            checkReturningUserProfilePic()
+        }
+    }
+    
+    func checkReturningUserProfilePic() {
+        var ref: DatabaseReference?
+        var handle: DatabaseHandle
+        let user = Auth.auth().currentUser
+        
+        ref = Database.database().reference()
+        
+        handle = (ref?.child(USERS_REF).child((user?.uid)!).child(PROFILE_PIC_REF).observe(.value, with: { (snapshot) in
+            
+            if (snapshot.value as? String) != nil {
+                if snapshot.value != nil {
+                    self.downloadingProfilePicFromFB()
+                }
+            } else {
+                print("MINA: User still has to choose profile pic")
+                print("MINA: \(String(describing: snapshot.value))")
+            }
+            
+        }))!
+        
+    }
+
+    
     @IBAction func signOutTapped(_ sender: Any) {
         let keychainResult = KeychainWrapper.standard.removeObject(forKey: KEY_UID)
         print("MINA: ID removed from Keychain \(keychainResult)")
         try! Auth.auth().signOut()
         performSegue(withIdentifier: SEGUE_IDENTIFIER1, sender: nil)
+        UserDefaults.standard.removeObject(forKey: PROFILE_IMAGE_KEY)
+        print("MINA: Profile Pic removed from local storage")
+    }
+    
+    func savingProfilePicLocally(img: UIImage) {
+        let profileData: NSData = UIImagePNGRepresentation(img)! as NSData
+        UserDefaults.standard.set(profileData, forKey: PROFILE_IMAGE_KEY)
     }
     
     

@@ -24,4 +24,16 @@ let POSTCELL_REF = "PostCell"
 
 let POST_STORAGE_REF = "post-pics"
 
+let PROFILE_STORAGE_REF = "profile-pics"
+
 let LIKES_REF = "likes"
+
+let PROFILE_IMAGE_KEY = "savedImage"
+
+let PROFILE_PIC_METADATA = "savedProfMetadata"
+
+//let PROF_IMG_TRACK = "profilePicTrack"
+
+let PROFILE_PIC_REF = "profile-pic"
+
+let PROFILE_PIC_STORAGE_REF = "profile-pics"

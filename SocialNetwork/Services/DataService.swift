@@ -21,10 +21,12 @@ class DataService {
     private var _REF_BASE = DB_BASE
     private var _REF_POSTS = DB_BASE.child(POSTS_REF)//getting the object posts
     private var _REF_USERS = DB_BASE.child(USERS_REF)
+    private var _REF_USER_PROFILEPIC_DATABASE = DB_BASE.child(PROFILE_PIC_REF)
     
     //Storage references
     private var _REF_POST_IMAGES = STORAGE_BASE.child(POST_STORAGE_REF)
-    //file the same way for profile images
+    //file the same way for profile images in storage
+    private var _REF_PROFILE_IMAGES_STORAGE = STORAGE_BASE.child(PROFILE_STORAGE_REF)
     
     var REF_BASE: DatabaseReference {
         return _REF_BASE
@@ -47,6 +49,16 @@ class DataService {
     var REF_POST_IMAGES: StorageReference {
         return _REF_POST_IMAGES
     }
+    
+    var REF_PROFILE_IMAGES: StorageReference{
+        return _REF_PROFILE_IMAGES_STORAGE
+    }
+    
+    var REF_PROFILE_IMAGES_DB: DatabaseReference {
+        return _REF_USER_PROFILEPIC_DATABASE
+    }
+    
+   
     
     
     
