@@ -31,20 +31,11 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        //UserDefaults.standard.removeObject(forKey: PROFILE_IMAGE_KEY)
-        
-        
-        //TODO - set up a gaurd statment
-        if UserDefaults.standard.object(forKey: PROFILE_IMAGE_KEY) == nil {
-            print("MINA: Still have to choose a profile pic")
-        } else {
-            getProfilePic()
-            print("MINA: Image found in local storage")
-        }
-      
+        profilePicStartUp()
         
         
+        
+    
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -229,8 +220,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
             }
             //storing the image locally
             print("MINA: Now storing the image locally")
-            let profileData: NSData = UIImagePNGRepresentation(img)! as NSData
-            UserDefaults.standard.set(profileData, forKey: PROFILE_IMAGE_KEY)
+           savingProfilePicLocally(img: img)
             
         }
         
@@ -238,13 +228,11 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
     }
     
     func getProfilePic() {
-        //get from NSUserdafaults or Firebase
-        //TODO - fix logic
-        if profileImg.image == nil{
+        if UserDefaults.standard.object(forKey: PROFILE_IMAGE_KEY) == nil {
+            downloadingProfilePicFromFB()
+        } else {
             let img = UserDefaults.standard.object(forKey: PROFILE_IMAGE_KEY) as! NSData
             profileImg.image = UIImage(data: img as Data)
-        } else {
-            downloadingProfilePicFromFB()
         }
         
         
@@ -280,14 +268,51 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
                         
                         DispatchQueue.main.async {
                             self.profileImg.image = UIImage(data: data!)
+                            self.savingProfilePicLocally(img: self.profileImg.image!)
                         }
+                        
                     }
                     
                 }).resume()
                 print("MINA: Profile Pic from database downloaded")
+                
+                
             }
         }))!
   
+    }
+    
+    
+    func profilePicStartUp() {
+        //TODO - get profile pic for returning user
+        if UserDefaults.standard.object(forKey: PROFILE_IMAGE_KEY) != nil {
+            print("MINA: User has profile pic downloaded")
+            getProfilePic()
+        } else {
+            checkReturningUserProfilePic()
+        }
+    }
+    
+    func checkReturningUserProfilePic() {
+        var ref: DatabaseReference?
+        var handle: DatabaseHandle
+        let user = Auth.auth().currentUser
+        
+        ref = Database.database().reference()
+        
+        handle = (ref?.child(USERS_REF).child((user?.uid)!).child(PROFILE_PIC_REF).observe(.value, with: { (snapshot) in
+            
+            if (snapshot.value as? String) != nil {
+                if snapshot.value != nil {
+                    self.downloadingProfilePicFromFB()
+                }
+            } else {
+                print("MINA: User still has to choose profile pic")
+                print("MINA: \(String(describing: snapshot.value))")
+            }
+            
+        }))!
+        
     }
 
     
@@ -296,6 +321,13 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
         print("MINA: ID removed from Keychain \(keychainResult)")
         try! Auth.auth().signOut()
         performSegue(withIdentifier: SEGUE_IDENTIFIER1, sender: nil)
+        UserDefaults.standard.removeObject(forKey: PROFILE_IMAGE_KEY)
+        print("MINA: Profile Pic removed from local storage")
+    }
+    
+    func savingProfilePicLocally(img: UIImage) {
+        let profileData: NSData = UIImagePNGRepresentation(img)! as NSData
+        UserDefaults.standard.set(profileData, forKey: PROFILE_IMAGE_KEY)
     }
     
     

@@ -45,12 +45,12 @@ class PostCell: UITableViewCell {
                 if error != nil {
                     print("MINA: Unable to download image from Firebase storage")
                 } else {
-                    print("MINA: Image downloaded from Firebase storage")
+                    //print("MINA: Image downloaded from Firebase storage")
                     if let imageData = data {
                         if let img = UIImage(data: imageData){
                             self.postImg.image = img
                             FeedVC.imageCache.setObject(img, forKey: post.imageUrl as NSString)
-                            print("MINA: Image Set in Cache")
+                            //print("MINA: Image Set in Cache")
                         }
                     }
                 }
