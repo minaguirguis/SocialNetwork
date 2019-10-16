@@ -160,17 +160,21 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
             let imgUid = NSUUID().uuidString//gets us the UID of the post
             let metaData = StorageMetadata()
             metaData.contentType = "image/jpeg"
-            
+            let storageRef = StorageReference()
             DataService.ds.REF_POST_IMAGES.child(imgUid).putData(imgData, metadata: metaData){ (metaData, error)in
                 if error != nil {
                     print("MINA: Unable to upload image to Firebase Storage")
                 } else {
                     print("MINA: Successfully uploaded to Firebase Storage")
-                    let downloadURL = metaData?.downloadURL()?.absoluteString
-                    if let url = downloadURL {
-                        self.postToFirebase(imgUrl: url)
-                        print("MINA: Successfully uploaded to Firebase Database")
+                    let downloadURL = storageRef.downloadURL { (url, error) in
+                        if error == nil {
+                            if let url = url {
+                                self.postToFirebase(imgUrl: url.absoluteString)
+                                print("MINA: Successfully uploaded to Firebase Database")
+                            }
+                        }
                     }
+
                 }
             }
         }
@@ -201,7 +205,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
             let imgUid = NSUUID().uuidString//generates unique ID for image
             let metaData = StorageMetadata()
             metaData.contentType = "image/jpeg"
-            
+            let storageRef = StorageReference()
             DataService.ds.REF_PROFILE_IMAGES.child(imgUid).putData(profImgData, metadata: metaData) { (metaData, error) in
                 
                 if error != nil {
@@ -209,12 +213,17 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIIm
                 } else {
                     //uploading it to firebase storage
                     print("MINA: Successfully uploaded Profile pic to Firebase storage")
-                    self.downloadURL = metaData?.downloadURL()?.absoluteString
-                    UserDefaults.standard.set(self.downloadURL, forKey: PROFILE_PIC_METADATA)
-                    
-                    //storing it to database
-                    self.ImgProfileRef = DataService.ds.REF_USER_CURRENT.child(PROFILE_PIC_REF)
-                    self.ImgProfileRef.setValue(self.downloadURL)
+                    storageRef.downloadURL { (url, error) in
+                        if error == nil {
+                            self.downloadURL = url?.absoluteString
+                           UserDefaults.standard.set(self.downloadURL, forKey: PROFILE_PIC_METADATA)
+                           
+                           //storing it to database
+                           self.ImgProfileRef = DataService.ds.REF_USER_CURRENT.child(PROFILE_PIC_REF)
+                           self.ImgProfileRef.setValue(self.downloadURL)
+                        }
+                    }
+                   
                 }
                 
             }

@@ -30,17 +30,17 @@ class SignInVC: UIViewController {
     
     @IBAction func facebookBtnTapped(_ sender: Any) {
         
-        let facebookLogin = FBSDKLoginManager()
+        let facebookLogin = LoginManager()
         
         //below we are requesting access just to the user's facebook email
-        facebookLogin.logIn(withReadPermissions: ["email"], from: self) { (result, error) in
+        facebookLogin.logIn(permissions: ["email"], from: self) { (result, error) in
             if error != nil {
                 print("MINA: Unable to authenticate with facebook - \(String(describing: error))")
             } else if result?.isCancelled == true {
                 print("MINA: User cancelled Facebook authentication")
             } else {
                 print("MINA: Successfully authenticated with Facebook")
-                let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)//getting the user's credentials
+                let credential = FacebookAuthProvider.credential(withAccessToken: AccessToken.current!.tokenString)//getting the user's credentials
                 
                 self.firebaseAuth(credential)
                 
@@ -58,7 +58,7 @@ class SignInVC: UIViewController {
                 print("MINA: Successfully authenticated with Firebase")
                 if let user = user {
                     let userData = ["provider": credenatial.provider]//from Databse
-                    self.completeSignIN(id: user.uid, userData: userData)
+                    self.completeSignIN(id: Auth.auth().currentUser!.uid, userData: userData)
                 }
             }
         }
@@ -73,8 +73,8 @@ class SignInVC: UIViewController {
                 if error == nil {
                     print("MINA: Email user authenticated with Firebase")
                     if let user = user {
-                        let userData = ["provider": user.providerID]//from Databse
-                        self.completeSignIN(id: user.uid, userData: userData)
+                        let userData = ["provider": Auth.auth().currentUser?.providerID]//from Databse
+                        self.completeSignIN(id: Auth.auth().currentUser!.uid, userData: userData as! Dictionary<String, String>)
                     }
                     
                 } else {
@@ -84,8 +84,8 @@ class SignInVC: UIViewController {
                         } else {
                             print("MINA: Successfully authenticated with Firebase")
                             if let user = user {
-                                let userData = ["provider": user.providerID]//from Database
-                                self.completeSignIN(id: user.uid, userData: userData)
+                                let userData = ["provider": Auth.auth().currentUser?.providerID]//from Database
+                                self.completeSignIN(id: Auth.auth().currentUser!.uid, userData: userData as! Dictionary<String, String>)
                             }
                         }
                     })
